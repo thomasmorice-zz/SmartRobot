@@ -24,11 +24,28 @@
             </div>
         </nav>
 
-        <!--Import jQuery before materialize.js-->
-        <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
-        <script type="text/javascript" src="lib/materialize.min.js"></script>
-        <script type="text/javascript" src="lib/underscore-min.js"></script>
-        <script type="text/javascript" src="lib/backbone-min.js"></script>
+        <div class="container">
+            <br/>
+            <br/>
+            <h2 class="header center orange-text">A Smart Robot application made with Backbone.js</h2>
+            <br/>
+            <br/>
+            <div class="room-view">
+                <div id="btn-init-room">
+                    <a id="create-squared-room" class="waves-effect waves-light btn">Create squared room</a>
+                    <a id="create-rounded-room" class="waves-effect waves-light btn">Create rounded room</a>
+                </div>
+            </div>
+
+            <!--Import jQuery before materialize.js-->
+            <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+            <script type="text/javascript" src="lib/materialize.min.js"></script>
+            <script type="text/javascript" src="lib/underscore-min.js"></script>
+            <script type="text/javascript" src="lib/backbone-min.js"></script>
+            <script type="text/javascript" src="app/models/room.js"></script>
+            <script type="text/javascript" src="app/views/roomView.js"></script>
+            <script type="text/javascript" src="app/app.js"></script>
+        </div>
     </body>
 
 </html>
