@@ -2,3 +2,13 @@ body {
     font-family: 'Lato', sans-serif;
     text-align: center;
 }
+
+.robot-view{
+    display:none;
+}
+
+.robot-view .robot-icon {
+    position:absolute;
+    text-align:center;
+    font-size: 30px;
+}
