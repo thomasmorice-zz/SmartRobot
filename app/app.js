@@ -4,37 +4,27 @@
  * Finally, keyboard controls will be allowed and the robot will be able to move around
  */
 
-//var roomView = new RoomView({
-//    model: room
-//});
-
-//roomView.createSquaredRoom();
-
 var app = (function() {
     $("#create-squared-room").click(function() {
+        // Set some global var
+        window.blockSize = 30; // The width and height of one block which represent a piece of the room
 
-        var blockSize = 30;
-        // Instanciate a squared room
+
         var room = new SquaredRoom({
-            height: 4,
-            width: 7
+            height: 5,
+            width: 5
         });
 
         var roomView = new RoomView({
             model: room,
         });
 
-        // Create the room with the value passed on parameters
-        if (!room.isValid()) {
-
-        }
-
-        roomView.drawRoom(blockSize);
+        roomView.drawRoom();
 
         var robot = new Robot({
             xValue: 1,
             yValue: 2,
-            languages: Languages.swe,
+            language: Languages.swe,
             room: room
         });
 
@@ -42,17 +32,11 @@ var app = (function() {
         var robotView = new RobotView({
             model: robot
         });
-        var canvasSize = document.getElementById('room-canvas').offsetWidth;
-
-        console.log(canvasSize);
-
-        robotView.drawRobot(blockSize, canvasSize);
-
-        alert("Start : "+robot.getPosition());
-        //console.log(robot);
+        // must use uppercase at this time
         robot.addMoveSequence("HGHGGHGHG");
-        robotView.drawRobot(blockSize, canvasSize);
-        alert("End : "+robot.getPosition());
+        robotView.drawRobot();
+        console.log(robot.getPosition());
+        //alert("End : "+robot.getPosition());
 
         // Create the robot with his position
         //robot.place();

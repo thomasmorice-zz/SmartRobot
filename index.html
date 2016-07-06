@@ -39,7 +39,22 @@
                 <br/>
                 <br/>
                 <div class="robot-view">
-                    <i class="material-icons robot-icon">android</i>
+                    <div id="controls">
+                        <a data-direction="right" class="waves-effect waves-light btn rotate"><i class="material-icons left">rotate_right</i>Rotate Right <span class="keyboard-shortcut-right">(h)</span></a>
+                        <a class="waves-effect waves-light btn move-on"><i class="material-icons left">arrow_upward</i>Move On <span class="keyboard-shortcut-go">(g)</span></a>
+                        <a data-direction="left" class="waves-effect waves-light btn rotate"><i class="material-icons left">rotate_left</i>Rotate Left <span class="keyboard-shortcut-left">(v)</span></a>
+                        <br/>
+                        <br/>
+                        <input class="languages-radio" data-abbreviation="swe" name="languages" type="radio" id="language-swe" />
+                        <label for="language-swe">Swedish</label>
+                        <input class="languages-radio" data-abbreviation="eng" name="languages" type="radio" id="language-eng" />
+                        <label for="language-eng">English</label>
+                        <br/>
+                        <br/>
+                        <strong> Current position : <span id="current-robot-position"></span></strong>
+                    </div>
+                    <i id="robot-icon" class="material-icons android">android</i>
+                    <i id="robot-icon-next-move" class="material-icons android">android</i>
                 </div>
                 <canvas id="room-canvas" width="750" height="750"></canvas>
             </div>

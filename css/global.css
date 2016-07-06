@@ -2,13 +2,66 @@ body {
     font-family: 'Lato', sans-serif;
     text-align: center;
 }
-
-.robot-view{
-    display:none;
+.robot-view #controls {
+    display: none;
+    margin-bottom: 50px;
+}
+.robot-view .android {
+    display: none;
+    position: absolute;
+    text-align: center;
+    font-size: 30px;
+}
+.robot-view #robot-icon-next-move {
+    display: none;
+    position: absolute;
+    -webkit-animation-name: blinker;
+    -webkit-animation-duration: 1s;
+    -webkit-animation-timing-function: linear;
+    -webkit-animation-iteration-count: infinite;
+    -moz-animation-name: blinker;
+    -moz-animation-duration: 1s;
+    -moz-animation-timing-function: linear;
+    -moz-animation-iteration-count: infinite;
+    animation-name: blinker;
+    animation-duration: 1s;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+}
+.robot-view #robot-icon-next-move.out-of-bounds {
+    color: tomato;
 }
 
-.robot-view .robot-icon {
-    position:absolute;
-    text-align:center;
-    font-size: 30px;
+@-moz-keyframes blinker {
+    0% {
+        opacity: 0.2;
+    }
+    50% {
+        opacity: 0.0;
+    }
+    100% {
+        opacity: 0.3;
+    }
+}
+@-webkit-keyframes blinker {
+    0% {
+        opacity: 0.2;
+    }
+    50% {
+        opacity: 0.0;
+    }
+    100% {
+        opacity: 0.3;
+    }
+}
+@keyframes blinker {
+    0% {
+        opacity: 0.2;
+    }
+    50% {
+        opacity: 0.0;
+    }
+    100% {
+        opacity: 0.3;
+    }
 }

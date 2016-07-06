@@ -11,12 +11,11 @@ var Languages = {
 }
 
 
-
 var Robot = Backbone.Model.extend({
     defaults: {
         xValue: 1,
         yValue: 1,
-        languages: Languages.swe,
+        language: Languages.swe,
         compassValue: 'N',
     },
 
@@ -29,8 +28,8 @@ var Robot = Backbone.Model.extend({
             this.set("yValue", attributes.yValue);
         }
 
-        if (!typeof attributes.languages === "undefined") {
-            this.set("languages", attributes.languages);
+        if (!typeof attributes.language === "undefined") {
+            this.set("language", attributes.language);
         }
     },
 
@@ -77,11 +76,12 @@ var Robot = Backbone.Model.extend({
 
     isInsideRoom: function() {
         var result = true;
-        if (this.get("xValue") > this.get("room").get("width") || this.get("xValue") < 0) {
+        if (this.get("xValue") > this.get("room").get("width") - 1 || this.get("xValue") < 0) {
             result = false;
-            alert("going to far on x-axis");
-        } else if (this.get("yValue") > this.get("room").get("height") || this.get("xValue") < 0) {
-            alert("going to far on y-axis");
+            Materialize.toast('Going to far on x-axis', 4000);
+        } else if (this.get("yValue") > this.get("room").get("height") - 1 || this.get("yValue") < 0) {
+            result = false;
+            Materialize.toast('Going to far on y-axis', 4000);
         }
 
         return result;
@@ -106,13 +106,13 @@ var Robot = Backbone.Model.extend({
         } else if (direction == "left") {
             switch (this.get('compassValue')) {
                 case 'N': // Turning East
-                    this.set('compassValue', 'E');
+                    this.set('compassValue', 'W');
                     break;
                 case 'E': // Turning SOuth
                     this.set('compassValue', 'N');
                     break;
                 case 'S': // Turning West
-                    this.set('compassValue', 'W');
+                    this.set('compassValue', 'E');
                     break;
                 case 'W': // Turning North
                     this.set('compassValue', 'S');
@@ -124,16 +124,28 @@ var Robot = Backbone.Model.extend({
     addMoveSequence: function(sequence) {
         for (var i = 0; i < sequence.length; i++) {
             var action = sequence[i];
+            this.moveAction(action);
+        }
+    },
 
-            if (this.get("languages") == Languages.swe) {
-                // V = turn left - H = turn right - G = Go forward
-                if (action == "V") {
-                    this.turn("left");
-                } else if (action == "H") {
-                    this.turn("right");
-                } else if (action == "G") {
-                    this.moveOn();
-                }
+    moveAction(action) {
+        if (this.get("language") == Languages.swe) {
+            // V = turn left - H = turn right - G = Go forward
+            if (action == "V") {
+                this.turn("left");
+            } else if (action == "H") {
+                this.turn("right");
+            } else if (action == "G") {
+                this.moveOn();
+            }
+        } else if (this.get("language") == Languages.eng) {
+            // V = turn left - H = turn right - G = Go forward
+            if (action == "L") {
+                this.turn("left");
+            } else if (action == "R") {
+                this.turn("right");
+            } else if (action == "F") {
+                this.moveOn();
             }
         }
     }

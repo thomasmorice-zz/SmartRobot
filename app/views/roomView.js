@@ -51,9 +51,9 @@ var RoomView = Backbone.View.extend({
 
 
     /* Draw the lines based on the room height and width from model
-     * The blockSize is passing as parameter, 50 is the max value for width & height upon that, the canvas will not render fully
+     * The blockSize is global, 50 is the max value for width & height upon that, the canvas will not render fully
      */
-    drawRoom: function(blockSize) {
+    drawRoom: function() {
 
         this.cleanRoom();
         if (this.model.isValid()) {
@@ -68,13 +68,13 @@ var RoomView = Backbone.View.extend({
             for (var j = 0; j < this.model.get("height"); j++) {
                 for (var i = 0; i < this.model.get("width"); i++) {
                     context.moveTo(x, y);
-                    context.lineTo(blockSize + x, y);
-                    context.lineTo(blockSize + x, blockSize + y);
-                    context.lineTo(x, y + blockSize);
+                    context.lineTo(window.blockSize + x, y);
+                    context.lineTo(window.blockSize + x, window.blockSize + y);
+                    context.lineTo(x, y + window.blockSize);
                     context.lineTo(x, y);
-                    x = x + blockSize;
+                    x = x + window.blockSize;
                 }
-                y = y + blockSize;
+                y = y + window.blockSize;
                 x = 0;
             }
 
