@@ -1,75 +1,99 @@
 <!DOCTYPE html>
 <html>
 
-    <head>
-        <!--Import Google Icon Font-->
-        <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-        <!--Import materialize.css-->
-        <link type="text/css" rel="stylesheet" href="css/materialize.min.css" media="screen,projection" />
-        <link type="text/css" rel="stylesheet" href="css/global.css" />
+<head>
+    <!--Import Google Icon Font-->
+    <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!--Import materialize.css-->
+    <link type="text/css" rel="stylesheet" href="css/materialize.min.css" media="screen,projection" />
+    <link type="text/css" rel="stylesheet" href="css/global.css" />
 
 
-        <!--Let browser know website is optimized for mobile-->
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    </head>
+    <!--Let browser know website is optimized for mobile-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+</head>
 
-    <body>
-        <nav>
-            <div class="nav-wrapper">
-                <a href="#" class="brand-logo center">Smart Robot</a>
-                <ul id="nav-mobile" class="left hide-on-med-and-down">
-                    <!-- No menu yet but who knows what could be added :O -->
-                </ul>
-            </div>
-        </nav>
-
-        <div class="container">
-            <br/>
-            <br/>
-            <h2 class="header center orange-text">A Smart Robot application made with Backbone.js</h2>
-            <br/>
-            <br/>
-
-            <div class="room-view">
-                <div id="btn-init-room">
-                    <a id="create-squared-room" class="waves-effect waves-light btn">Create squared room</a>
-                    <a id="create-rounded-room" class="waves-effect waves-light btn">Create rounded room</a>
-                </div>
-                <br/>
-                <br/>
-                <div class="robot-view">
-                    <div id="controls">
-                        <a data-direction="right" class="waves-effect waves-light btn rotate"><i class="material-icons left">rotate_right</i>Rotate Right <span class="keyboard-shortcut-right">(h)</span></a>
-                        <a class="waves-effect waves-light btn move-on"><i class="material-icons left">arrow_upward</i>Move On <span class="keyboard-shortcut-go">(g)</span></a>
-                        <a data-direction="left" class="waves-effect waves-light btn rotate"><i class="material-icons left">rotate_left</i>Rotate Left <span class="keyboard-shortcut-left">(v)</span></a>
-                        <br/>
-                        <br/>
-                        <input class="languages-radio" data-abbreviation="swe" name="languages" type="radio" id="language-swe" />
-                        <label for="language-swe">Swedish</label>
-                        <input class="languages-radio" data-abbreviation="eng" name="languages" type="radio" id="language-eng" />
-                        <label for="language-eng">English</label>
-                        <br/>
-                        <br/>
-                        <strong> Current position : <span id="current-robot-position"></span></strong>
-                    </div>
-                    <i id="robot-icon" class="material-icons android">android</i>
-                    <i id="robot-icon-next-move" class="material-icons android">android</i>
-                </div>
-                <canvas id="room-canvas" width="750" height="750"></canvas>
-            </div>
-
-            <!--Import jQuery before materialize.js-->
-            <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
-            <script type="text/javascript" src="lib/materialize.min.js"></script>
-            <script type="text/javascript" src="lib/underscore-min.js"></script>
-            <script type="text/javascript" src="lib/backbone-min.js"></script>
-            <script type="text/javascript" src="app/models/room.js"></script>
-            <script type="text/javascript" src="app/models/robot.js"></script>
-            <script type="text/javascript" src="app/views/roomView.js"></script>
-            <script type="text/javascript" src="app/views/robotView.js"></script>
-            <script type="text/javascript" src="app/app.js"></script>
+<body>
+    <nav>
+        <div class="nav-wrapper">
+            <a href="#" class="brand-logo center">Smart Robot</a>
+            <ul id="nav-mobile" class="left hide-on-med-and-down">
+                <!-- No menu yet but who knows what could be added :O -->
+            </ul>
         </div>
-    </body>
+    </nav>
+
+    <div class="container">
+
+        <div class="fixed-action-btn horizontal" style="bottom: 45px; right: 24px;">
+            <a id="btn-refresh-page" class="btn-floating btn-large red" onclick="location.reload();">
+                <i class="large material-icons">refresh</i>
+            </a>
+        </div>
+
+        <br/>
+        <br/>
+        <h2 class="header center orange-text">A Smart Robot application made with Backbone.js</h2>
+        <br/>
+        <br/>
+        <div class="room-view">
+            <div id="btn-init-room">
+                <a data-roomtype="squared" id="create-squared-room" class="waves-effect waves-light btn create-room">Create squared room</a>
+                <a data-roomtype="rounded" id="create-rounded-room" class="waves-effect waves-light btn create-room">Create rounded room</a>
+            </div>
+            <div id="input-launch-action-sequence" class="input-field" style="width: 400px;margin:0 auto;">
+                <input id="input-action_sequence" type="text" class="validate">
+                <label for="last_name">Enter Action Sequence</label>
+                <a id="button-launch-sequence" class="waves-effect waves-light btn">Launch sequence</a>
+            </div>
+            <br/>
+            <br/>
+            <div id="switch-keyboard-input" class="switch">
+                <label>
+                    Disable Keyboard
+                    <input type="checkbox" id="keyboard-enabled">
+                    <span class="lever"></span> Enable Keyboard
+                </label>
+            </div>
+            <br/>
+            <br/>
+            <div class="robot-view">
+                <div id="controls">
+                    <a data-direction="right" class="waves-effect waves-light btn rotate"><i class="material-icons left">rotate_right</i>Rotate Right <span class="keyboard-shortcut-right">(h)</span></a>
+                    <a class="waves-effect waves-light btn move-on"><i class="material-icons left">arrow_upward</i>Move On <span class="keyboard-shortcut-go">(g)</span></a>
+                    <a data-direction="left" class="waves-effect waves-light btn rotate"><i class="material-icons left">rotate_left</i>Rotate Left <span class="keyboard-shortcut-left">(v)</span></a>
+                    <br/>
+                    <br/>
+                    <input class="languages-radio" data-abbreviation="swe" name="languages" type="radio" id="language-swe" />
+                    <label for="language-swe">Swedish</label>
+                    <input class="languages-radio" data-abbreviation="eng" name="languages" type="radio" id="language-eng" />
+                    <label for="language-eng">English</label>
+                    <br/>
+                    <br/>
+                    <strong> Current position : <span id="current-robot-position"></span></strong>
+                </div>
+                <i id="robot-icon" class="material-icons android">android</i>
+                <i id="robot-icon-next-move" class="material-icons android">android</i>
+            </div>
+            <canvas id="room-canvas" width="750" height="750"></canvas>
+        </div>
+
+        <!--Import jQuery before materialize.js-->
+        <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+        <script type="text/javascript" src="lib/materialize.min.js"></script>
+        <!--Import backbone & underscore-->
+        <script type="text/javascript" src="lib/underscore-min.js"></script>
+        <script type="text/javascript" src="lib/backbone-min.js"></script>
+        <!--Import Models-->
+        <script type="text/javascript" src="app/models/room.js"></script>
+        <script type="text/javascript" src="app/models/robot.js"></script>
+        <!--Import Views-->
+        <script type="text/javascript" src="app/views/roomView.js"></script>
+        <script type="text/javascript" src="app/views/robotView.js"></script>
+        <!--Import App.js-->
+        <script type="text/javascript" src="app/app.js"></script>
+    </div>
+</body>
 
 </html>

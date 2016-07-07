@@ -1,3 +1,4 @@
+// A compass object which will helps us manage the
 var Compass = {
     "N": "North",
     "E": "East",
@@ -5,20 +6,30 @@ var Compass = {
     "W": "West"
 };
 
+// A languages object which contains available languages
+// todo: use this object to construct radio button on page dinamically
 var Languages = {
     "swe": "Swedish",
     "eng": "English"
 }
 
-
+/*
+ * Robot - Backbone.Model
+ * The model for a robot
+ */
 var Robot = Backbone.Model.extend({
     defaults: {
-        xValue: 1,
-        yValue: 1,
-        language: Languages.swe,
-        compassValue: 'N',
+        xValue: 1, // abciss position
+        yValue: 1, // ordinate position
+        language: Languages.swe, // current language
+        compassValue: 'N', // direction where the robot is looking
+        keyboardEnabled: true // if false, the robot will not move when keys are pressed
     },
 
+    /*
+     * Function initialize
+     * Check for the attributes, use them if they are valid
+     */
     initialize: function(attributes) {
         if (!typeof attributes.xValue === "undefined") {
             this.set("xValue", attributes.xValue);
@@ -33,7 +44,11 @@ var Robot = Backbone.Model.extend({
         }
     },
 
-
+    /*
+     * Function validate
+     * Call isValid() from the app to trigger this funtion
+     * if isValid() is not true, the response will be the message returned from this function
+     */
     validate: function(attributes) {
         if (attributes.xValue < 1 || attributes.xValue > attributes.roomWidth || attributes.yValue < 1 || attributes.yValue > attributes.roomHeight) {
             return "The robot position is outside the map";
@@ -42,11 +57,21 @@ var Robot = Backbone.Model.extend({
         }
     },
 
-
+    /*
+     * Function getPosition
+     * Get the current position of the robot
+     */
     getPosition: function() {
         return this.get('xValue') + ' ' + this.get('yValue') + ' ' + this.get('compassValue');
     },
+
+    /*
+     * Function moveOn
+     * Move the robot forward
+     * if the method is called from a clone, the robot will not move
+     */
     moveOn: function(isClone) {
+        var hasMoveOn = true;
         if (isClone || this.canMoveOn()) {
             switch (this.get('compassValue')) {
                 case 'N': // Moving North
@@ -62,8 +87,18 @@ var Robot = Backbone.Model.extend({
                     this.set('xValue', this.get('xValue') - 1);
                     break;
             }
+        } else {
+            // The robot cannot move forward because.. the room is too small
+            hasMoveOn = false;
         }
+        return hasMoveOn;
     },
+
+    /*
+     * Function canMoveOn
+     * Method is useful to know if the robot can move forward
+     * We check for the clone position after he has been moved to be sure he is still in the room
+     */
     canMoveOn: function() {
         var result = false;
         var cloneRobot = this.model = this.clone();
@@ -74,19 +109,37 @@ var Robot = Backbone.Model.extend({
         return result;
     },
 
+    /*
+     * Function isInsideRoom
+     * If the robot is trying to escape the room, result will be false
+     */
     isInsideRoom: function() {
         var result = true;
-        if (this.get("xValue") > this.get("room").get("width") - 1 || this.get("xValue") < 0) {
-            result = false;
-            Materialize.toast('Going to far on x-axis', 4000);
-        } else if (this.get("yValue") > this.get("room").get("height") - 1 || this.get("yValue") < 0) {
-            result = false;
-            Materialize.toast('Going to far on y-axis', 4000);
+        if (this.get("room").get("roomType") == "squared") {
+            if (this.get("xValue") > this.get("room").get("width") - 1 || this.get("xValue") < 0) {
+                result = false;
+            } else if (this.get("yValue") > this.get("room").get("height") - 1 || this.get("yValue") < 0) {
+                result = false;
+            }
+        } else if (this.get("room").get("roomType") == "rounded") {
+            var radius = this.get("room").get("radius");
+            // The equation used to get the max value for a coordinate in the circle is
+            // square(x) + square(y) = square(radius)
+            var maxValueForY = Math.abs(Math.trunc(Math.sqrt(radius * radius - this.get("xValue") * this.get("xValue"))));
+            var maxValueForX = Math.abs(Math.trunc(Math.sqrt(radius * radius - this.get("yValue") * this.get("yValue"))));
+
+            if (Math.abs(this.get("xValue")) > maxValueForX || Math.abs(this.get("yValue")) > maxValueForY) {
+                result = false;
+            }
         }
 
         return result;
     },
 
+    /*
+     * Function turn
+     * check for the current language of the robot and turn him if the key is correct
+     */
     turn: function(direction) {
         if (direction == "right") {
             switch (this.get('compassValue')) {
@@ -121,14 +174,27 @@ var Robot = Backbone.Model.extend({
         }
     },
 
+    /*
+     * Function addMoveSequence
+     * A move sequence is passed, we parse every character and process each action
+     */
     addMoveSequence: function(sequence) {
+        var robotTryToEscape = false;
         for (var i = 0; i < sequence.length; i++) {
             var action = sequence[i];
-            this.moveAction(action);
+            robotTryToEscape = this.moveAction(action);
         }
+        return robotTryToEscape
     },
 
+    /*
+     * Function moveAction
+     * Check the action and do the move if the robot understand it
+     * todo: create model for keyboard to manage it dynamically
+     */
     moveAction(action) {
+        action = action.toUpperCase();
+        var hasMoved = true;
         if (this.get("language") == Languages.swe) {
             // V = turn left - H = turn right - G = Go forward
             if (action == "V") {
@@ -136,17 +202,22 @@ var Robot = Backbone.Model.extend({
             } else if (action == "H") {
                 this.turn("right");
             } else if (action == "G") {
-                this.moveOn();
+                if (!this.moveOn()) {
+                    hasMoved = false;
+                }
             }
         } else if (this.get("language") == Languages.eng) {
-            // V = turn left - H = turn right - G = Go forward
+            // L = turn left - R = turn right - F = Go forward
             if (action == "L") {
                 this.turn("left");
             } else if (action == "R") {
                 this.turn("right");
             } else if (action == "F") {
-                this.moveOn();
+                if (!this.moveOn()) {
+                    hasMoved = false;
+                }
             }
         }
+        return hasMoved;
     }
 });

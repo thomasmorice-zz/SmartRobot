@@ -5,40 +5,46 @@
  */
 
 var app = (function() {
-    $("#create-squared-room").click(function() {
-        // Set some global var
+    $(".create-room").click(function(event) {
+        // Change some elements on the page
+        $("#btn-init-room").hide();
+        $("#btn-refresh-page").css('display', 'inline-block');
+        $("#keyboard-enabled").prop("checked", true);
+        $("#switch-keyboard-input").show();
+
+        // Global var
         window.blockSize = 30; // The width and height of one block which represent a piece of the room
 
+        // Initialize a room
+        if ($(event.target).data("roomtype") == "squared") {
+            var room = new SquaredRoom({
+                height: 5, // The room will have 5 blocks as height
+                width: 5 // The room will have 5 blocks as width
+            });
+        } else {
+            var room = new RoundedRoom({
+                radius: 7, // The room will have 5 blocks as height
+            });
+        }
 
-        var room = new SquaredRoom({
-            height: 5,
-            width: 5
-        });
-
+        // Initialize the view with the current room
+        // It will automatically be drawn on the page
         var roomView = new RoomView({
             model: room,
         });
 
-        roomView.drawRoom();
-
+        // Intialize the robot
         var robot = new Robot({
-            xValue: 1,
-            yValue: 2,
-            language: Languages.swe,
-            room: room
+            xValue: 1, // add x value for abciss position
+            yValue: 2, // add y value for ordinate position
+            language: Languages.swe, // add a default language to the robot
+            room: room // add the room so the robot will know where he is and can interact
         });
 
-
+        // Initialize the view with the current robot
+        // It will automatically be placed on the room at the position it belongs
         var robotView = new RobotView({
             model: robot
         });
-        // must use uppercase at this time
-        robot.addMoveSequence("HGHGGHGHG");
-        robotView.drawRobot();
-        console.log(robot.getPosition());
-        //alert("End : "+robot.getPosition());
-
-        // Create the robot with his position
-        //robot.place();
     });
 })();

@@ -2,6 +2,16 @@ body {
     font-family: 'Lato', sans-serif;
     text-align: center;
 }
+#btn-refresh-page {
+    display: none;
+    background-color: tomato;
+}
+#input-launch-action-sequence {
+    display: none;
+}
+#switch-keyboard-input {
+    display: none;
+}
 .robot-view #controls {
     display: none;
     margin-bottom: 50px;
@@ -13,6 +23,7 @@ body {
     font-size: 30px;
 }
 .robot-view #robot-icon-next-move {
+    /* this one will blink so the user can see where the robot is supposed to go */
     display: none;
     position: absolute;
     -webkit-animation-name: blinker;
@@ -31,7 +42,6 @@ body {
 .robot-view #robot-icon-next-move.out-of-bounds {
     color: tomato;
 }
-
 @-moz-keyframes blinker {
     0% {
         opacity: 0.2;

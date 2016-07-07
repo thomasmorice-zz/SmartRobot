@@ -1,35 +1,12 @@
 var RoomView = Backbone.View.extend({
     el: "room-view",
-    events: {
-        //"click #create-squared-room": "createSquaredRoom",
-        //"click #create-rounded-room": "createRoundedRoom",
-    },
 
-    createSquaredRoom: function(height, width) {
-        if (typeof height === "undefined") {
-            // If no height parameters has been passed, ask for it
-            var height = prompt("Please enter a number for the room height:");
-        }
-
-        if (typeof width === "undefined") {
-            // If no width parameters has been passed, ask for it
-            var width = prompt("Please enter a number for the room width:");
-        }
-
-        this.model.set("height", height);
-        this.model.set("width", width);
-        // Check if everything is validate correctly
-        if (!this.model.isValid()) {
-            Materialize.toast(this.model.validationError, 4000) // 4000 is the duration of the toast
-        }
-    },
-
-
-
-    createRoundedRoom: function() {
-        this.model = new RoundedRoom();
-        var radius = prompt("Please enter a number for the room radius:");
-        this.model.set("radius", radius);
+    /*
+     * Function initialize
+     * We have the room model so let's show it on the screen
+     */
+    initialize: function() {
+        this.drawRoom();
     },
 
     // Reset the canvas
@@ -48,14 +25,10 @@ var RoomView = Backbone.View.extend({
         context.beginPath();
     },
 
-
-
     /* Draw the lines based on the room height and width from model
      * The blockSize is global, 50 is the max value for width & height upon that, the canvas will not render fully
      */
     drawRoom: function() {
-
-        this.cleanRoom();
         if (this.model.isValid()) {
             this.cleanRoom();
             var canvas = document.getElementById('room-canvas');
@@ -65,35 +38,30 @@ var RoomView = Backbone.View.extend({
             var x = 0;
             var y = 0;
 
-            for (var j = 0; j < this.model.get("height"); j++) {
-                for (var i = 0; i < this.model.get("width"); i++) {
-                    context.moveTo(x, y);
-                    context.lineTo(window.blockSize + x, y);
-                    context.lineTo(window.blockSize + x, window.blockSize + y);
-                    context.lineTo(x, y + window.blockSize);
-                    context.lineTo(x, y);
-                    x = x + window.blockSize;
+            if (this.model.get("roomType") == "squared") {
+                // If the room is squared (works with rectangle) draw a grid
+                for (var j = 0; j < this.model.get("height"); j++) {
+                    for (var i = 0; i < this.model.get("width"); i++) {
+                        context.moveTo(x, y);
+                        context.lineTo(window.blockSize + x, y);
+                        context.lineTo(window.blockSize + x, window.blockSize + y);
+                        context.lineTo(x, y + window.blockSize);
+                        context.lineTo(x, y);
+                        x = x + window.blockSize;
+                    }
+                    y = y + window.blockSize;
+                    x = 0;
                 }
-                y = y + window.blockSize;
-                x = 0;
+            } else if (this.model.get("roomType") == "rounded") {
+                // If the room is rounded draw a circle
+                var center = this.model.get("radius") * blockSize;
+                var radius = this.model.get("radius") * blockSize
+
+                context.beginPath();
+                context.arc(center, center, radius, 0, 2 * Math.PI, false);
             }
-
-            //robotIcon = $("#robot-icon");
-            //robotIcon.show();
-
-            context.strokeStyle = "black";
+            context.strokeStyle = "tomato";
             context.stroke();
         }
     },
-
-
-    createRobot: function() {
-        var robot = new Robot(1, 2);
-        if (robot.isValid({
-                roomHeight: this.model.get("height"),
-                roomWidth: this.model.get("width")
-            }));
-    }
-
-
 });
