@@ -31,14 +31,20 @@ var Robot = Backbone.Model.extend({
      * Check for the attributes, use them if they are valid
      */
     initialize: function(attributes) {
-        if (typeof attributes.xValue === "undefined" && this.get("room").get("roomType") == "rounded") {
-            // if the room is rounded and there is no parameter for X
-            this.set("xValue", 0);
+        if (typeof attributes.xValue === "undefined" && typeof this.get("room") !== "undefined") {
+            if (this.get("room").get("roomType") == "rounded") {
+                // if the room is rounded and there is no parameter for X
+                this.set("xValue", 0);
+            }
+
         }
 
-        if (typeof attributes.yValue === "undefined" && this.get("room").get("roomType") == "rounded") {
-            // if the room is rounded and there is no parameter for X
-            this.set("yValue", 0);
+        if (typeof attributes.yValue === "undefined" && typeof this.get("room") !== "undefined") {
+            if (this.get("room").get("roomType") == "rounded") {
+                // if the room is rounded and there is no parameter for X
+                this.set("yValue", 0);
+            }
+
         }
     },
 
