@@ -23,7 +23,7 @@ var app = (function() {
             });
         } else {
             var room = new RoundedRoom({
-                radius: 7, // The room will have 5 blocks as height
+                radius: 10, // The room will have 10 blocks as radius
             });
         }
 
@@ -35,8 +35,6 @@ var app = (function() {
 
         // Intialize the robot
         var robot = new Robot({
-            xValue: 1, // add x value for abciss position
-            yValue: 2, // add y value for ordinate position
             language: Languages.swe, // add a default language to the robot
             room: room // add the room so the robot will know where he is and can interact
         });

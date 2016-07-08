@@ -20,7 +20,7 @@ var Languages = {
 var Robot = Backbone.Model.extend({
     defaults: {
         xValue: 1, // abciss position
-        yValue: 1, // ordinate position
+        yValue: 2, // ordinate position
         language: Languages.swe, // current language
         compassValue: 'N', // direction where the robot is looking
         keyboardEnabled: true // if false, the robot will not move when keys are pressed
@@ -31,16 +31,14 @@ var Robot = Backbone.Model.extend({
      * Check for the attributes, use them if they are valid
      */
     initialize: function(attributes) {
-        if (!typeof attributes.xValue === "undefined") {
-            this.set("xValue", attributes.xValue);
+        if (typeof attributes.xValue === "undefined" && this.get("room").get("roomType") == "rounded") {
+            // if the room is rounded and there is no parameter for X
+            this.set("xValue", 0);
         }
 
-        if (!typeof attributes.yValue === "undefined") {
-            this.set("yValue", attributes.yValue);
-        }
-
-        if (!typeof attributes.language === "undefined") {
-            this.set("language", attributes.language);
+        if (typeof attributes.yValue === "undefined" && this.get("room").get("roomType") == "rounded") {
+            // if the room is rounded and there is no parameter for X
+            this.set("yValue", 0);
         }
     },
 
