@@ -11,8 +11,8 @@
  */
 var SquaredRoom = Backbone.Model.extend({
     defaults: {
-        height: 1,
-        width: 1,
+        height: 5,
+        width: 5,
         roomType: "squared"
     },
 
@@ -44,7 +44,7 @@ var SquaredRoom = Backbone.Model.extend({
  */
 var RoundedRoom = Backbone.Model.extend({
     defaults: {
-        radius: 1,
+        radius: 10,
         roomType: "rounded"
     },
 
